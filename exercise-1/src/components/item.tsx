@@ -1,16 +1,21 @@
-import { ItemId } from "../App"
+import { type ItemId } from '../types/item';
 
-const Item = (
-    {id, text, handleClick} : 
-    {id: ItemId, text: string, handleClick: () => void}) => {
-    return(
-        <li key={id}>
-            {text}
-            <button onClick={handleClick}>
-                Eliminar elemento
-            </button>
-        </li>
-    )
-}
+const Item = ({
+	id,
+	text,
+	handleClick,
+}: {
+	id: ItemId;
+	text: string;
+	handleClick: () => void;
+}) => {
+	return (
+		<li key={id}>
+			{/* <p>{text}</p> */}
+			{text}
+			<button onClick={handleClick}>Eliminar elemento</button>
+		</li>
+	);
+};
 
-export default Item
+export default Item;

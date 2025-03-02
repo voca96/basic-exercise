@@ -1,53 +1,21 @@
-import { useState } from "react"
-import { ItemId, type Item } from "../App"
-
-// const INITIALS_ITEMS: Item[] = [
-//   {
-//     id: crypto.randomUUID(),
-//     timestamp: Date.now(),
-//     text: 'ideojuegos',
-//   },
-//   {
-//     id: crypto.randomUUID(),
-//     timestamp: Date.now(),
-//     text: 'libros',
-//   },
-//   {
-//     id: crypto.randomUUID(),
-//     timestamp: Date.now(),
-//     text: 'peliculas',
-//   },
-//   {
-//     id: crypto.randomUUID(),
-//     timestamp: Date.now(),
-//     text: 'comics',
-//   }
-// ]
-
+import { useReducer } from 'react';
+import { type ItemId } from '../types/item';
+import { ITEMS_ACTION_TYPES, reducer, INITIAL_STATE } from '../reducers/items';
 
 export const useItem = () => {
-    // const [items, setItems] = useState<Item[]>(INITIALS_ITEMS)
-  const [items, setItems] = useState<Item[]>([])
+	const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  const addItem = (text: string) =>{
-      const newItem: Item = {
-        id:crypto.randomUUID(),
-        text,
-        timestamp: Date.now()
-      }
-    
-      setItems((prevItems) => [...prevItems, newItem])
-  }
+	const addItem = (text: string) => {
+		dispatch({ type: ITEMS_ACTION_TYPES.addItems, payload: { text } });
+	};
 
-  const removeItem = (id: ItemId) => {
-    setItems(prevItems => {
-        return prevItems.filter(currentItem => currentItem.id !== id)
-    })
-  }
+	const removeItem = (id: ItemId) => {
+		dispatch({ type: ITEMS_ACTION_TYPES.removeItem, payload: { id } });
+	};
 
-  return {
-    items,
-    addItem,
-    removeItem
-  }
-}
+	return {
+		items: state,
+		addItem,
+		removeItem,
+	};
+};
