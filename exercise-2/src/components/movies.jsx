@@ -1,16 +1,16 @@
 function MovieToShow({ movies }) {
 	return (
 		<>
-			<h2>Lista de peliculas</h2>
+			<h2>Lista de películas</h2>
 			<ul>
 				{movies?.map((movie) => {
 					return (
 						<li key={movie.id}>
+							<h3>{movie.title}</h3>
 							<img
 								src={movie.poster}
 								alt={`Poster of ${movie.title}`}
 							/>
-							<h3>{movie.title}</h3>
 							<p>{movie.year}</p>
 						</li>
 					);

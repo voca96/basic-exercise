@@ -1,25 +1,24 @@
 import { useState } from 'react';
-import { API_KEY } from '../config';
+
+import { useRef } from 'react';
+import { getMoviesService } from '../services/getMovies';
 
 export function useMovie() {
 	const [movies, setMovies] = useState([]);
+	const [sort, setSort] = useState(false);
+	const lastSearch = useRef('');
 
-	// ESTO PUEDE SER PASADO A UN SERVICIO
-	const moviesFormat = movies?.map((movie) => ({
-		id: movie.imdbID,
-		title: movie.Title,
-		year: movie.Year,
-		poster: movie.Poster,
-	}));
-
-	function getMovies(search) {
-		fetch(`https://www.omdbapi.com/?s=${search}&page=1&apikey=${API_KEY}`)
-			.then((res) => res.json())
-			.then(({ Search }) => setMovies(Search));
+	// ACA SE VUELVE A CREAR CADA VEZ QUE EL SORT CAMBIA SIN NINGUN TIPO DE SENTIDO YA QUE ESTA FUNCION NO DEPENDE DEL SORT
+	async function getMovies(search) {
+		if (search === lastSearch.current) return;
+		lastSearch.current = search;
+		const movies = await getMoviesService(search);
+		setMovies(movies);
 	}
-	// HASTA ACA
 
-	return { mappedMovies: moviesFormat, getMovies };
+	const sortedMovies = sort
+		? [...movies].sort((a, b) => a.title.localeCompare(b.title))
+		: movies;
+
+	return { movies: sortedMovies, getMovies, setSort };
 }
-
-//   sortedMovies= sort ? [...movies].sort((a,b) => a.title.localeCompare(b.title)) : movies
