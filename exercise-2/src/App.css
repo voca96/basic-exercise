@@ -1,0 +1,17 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* 
+  list-style: none;
+  margin:0;
+  padding:0;
+
+  display: grid;
+  wigth: 100%;
+  grid-template-colum: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px
+  */
