@@ -1,6 +1,7 @@
 import './style.css';
 import { useRef, useState } from 'react';
 import { mockList, type ToDoItems, type ItemId } from './mock/list';
+import React from 'react';
 
 function setLocalStorage(list: ToDoItems[]) {
 	window.localStorage.setItem('todoList', JSON.stringify(list));
@@ -73,10 +74,37 @@ function App() {
 		setTodoList(newTodoList);
 	}
 
+	// DRAG AND DROP FUNCTIONS
+	function handleDragStart(e: React.DragEvent<HTMLLIElement>, item: ToDoItems) {
+		e.dataTransfer.clearData();
+		e.dataTransfer.setData('text/plain', JSON.stringify(item));
+	}
+
+	function handleDragEnd(e: React.DragEvent<HTMLLIElement>) {
+		console.log('end');
+	}
+
+	function handleDrop(
+		e: React.DragEvent<HTMLDivElement>,
+		positionToInsert: number
+	) {
+		const todoItem = JSON.parse(e.dataTransfer.getData('text'));
+		const itemIndexById = todoList.findIndex((item) => item.id === todoItem.id);
+		if (
+			itemIndexById !== positionToInsert &&
+			itemIndexById + 1 !== positionToInsert
+		) {
+			const newTodoList = todoList.filter((item) => item.id !== todoItem.id);
+			newTodoList.splice(positionToInsert, 0, todoItem);
+			setTodoList(newTodoList);
+		}
+	}
+
 	return (
 		<main>
 			<section>
 				<header>
+					<h1>ToDo List</h1>{' '}
 					<form onSubmit={handleSubmit}>
 						<input
 							type='text'
@@ -85,20 +113,40 @@ function App() {
 					</form>
 				</header>
 				<ul>
-					{todoList.map((item) => {
+					<div
+						onDragEnter={() => console.log('enter')}
+						onDragLeave={() => console.log('leave')}
+						onDrop={(e) => handleDrop(e, 0)}
+						onDragOver={(e) => e.preventDefault()}
+					>
+						Drop here
+					</div>
+					{todoList.map((item, index) => {
 						return (
-							<li
-								key={item.id}
-								className={item.finished ? 'finished' : ''}
-							>
-								<input
-									type='checkbox'
-									checked={item.finished}
-									onChange={handleCheck(item.id)}
-								/>
-								{item.text}
-								<button onClick={handleClick(item.id)}>eliminar</button>
-							</li>
+							<React.Fragment key={item.id}>
+								<li
+									className={item.finished ? 'finished' : ''}
+									draggable
+									onDragStart={(e) => handleDragStart(e, item)}
+									onDragEnd={handleDragEnd}
+								>
+									<input
+										type='checkbox'
+										checked={item.finished}
+										onChange={handleCheck(item.id)}
+									/>
+									{item.text}
+									<button onClick={handleClick(item.id)}>eliminar</button>
+								</li>
+								<div
+									onDragEnter={() => console.log('enter')} // manejo css
+									onDragLeave={() => console.log('leave')} // manejo css
+									onDrop={(e) => handleDrop(e, index + 1)} // actualizacion de estado
+									onDragOver={(e) => e.preventDefault()}
+								>
+									Drop here
+								</div>
+							</React.Fragment>
 						);
 					})}
 				</ul>

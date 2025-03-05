@@ -1,3 +1,9 @@
 .finished {
 	text-decoration-line: line-through;
 }
+
+li:active {
+	opacity: 0.9;
+	/* border: 1px solid #121212; */
+	cursor: grab;
+}
