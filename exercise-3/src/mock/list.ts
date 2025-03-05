@@ -42,4 +42,29 @@ export const mockList: ToDoItems[] = [
 		text: 'Agregar una opcion para eliminar los elementos de la lista ya terminados',
 		finished: false,
 	},
+	{
+		id: crypto.randomUUID(),
+		text: 'mostrar numero de Todo pendientes',
+		finished: false,
+	},
+	{
+		id: crypto.randomUUID(),
+		text: 'Editar un todo pendiente con doble click',
+		finished: false,
+	},
+	{
+		id: crypto.randomUUID(),
+		text: 'CSS e iconos',
+		finished: false,
+	},
+	{
+		id: crypto.randomUUID(),
+		text: 'useReducer',
+		finished: false,
+	},
+	{
+		id: crypto.randomUUID(),
+		text: 'test end-to-end',
+		finished: false,
+	},
 ];
