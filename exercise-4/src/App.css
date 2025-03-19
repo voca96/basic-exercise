@@ -1,6 +1,7 @@
 main {
 	width: 100%;
 	padding: 100px;
+	padding-top: 50px;
 	box-sizing: border-box;
 }
 
@@ -18,10 +19,67 @@ ul {
 	gap: 2px;
 }
 
+ul li img:active {
+	cursor: grab;
+}
+
 /* li {
 	width: 100%;
 } */
 
 img {
 	width: 100%;
+}
+
+.modal-back {
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.7);
+	width: 100vw;
+	height: 100vh;
+}
+
+.modal {
+	position: absolute;
+	box-sizing: border-box;
+	z-index: 1;
+	background-color: #d2d2d2;
+	color: black;
+	padding: 34px 80px;
+	width: calc(100% - 200px);
+	top: 100px;
+	left: 100px;
+	height: calc(100vh - 200px);
+	display: flex;
+}
+
+.modal h1 {
+	margin: 0;
+	text-decoration: underline;
+}
+
+.modal img {
+	height: 100%;
+	margin-right: 24px;
+	object-fit: contain;
+	object-position: left;
+	width: fit-content;
+}
+
+.tier-list-cat {
+	border: 1px solid #8b8d02;
+	display: flex;
+}
+
+.tier-list-cat > div:first-child {
+	background-color: red;
+	width: 20%;
+	padding: 20px;
+	box-sizing: border-box;
+	text-align: center;
+}
+
+.tier-list-cat > div:first-child::first-letter {
+	text-transform: capitalize;
 }

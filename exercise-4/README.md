@@ -4,11 +4,11 @@ Ejercio 4: TIER LIST
 
 iteracion 1:
 
-mostrar una lista de imagenes
+✅ mostrar una lista de imagenes
 
-seleccionar una imagen y mostrar un contexto de la misma
+✅ seleccionar una imagen y mostrar un contexto de la misma
 
-mostrar tablero de secciones
+✅ mostrar tablero de secciones
 
 agregar imagenes a una seccion mediante drag and drop
 
