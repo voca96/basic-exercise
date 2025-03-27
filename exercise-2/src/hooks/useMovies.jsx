@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useRef } from 'react';
 import { getMoviesService } from '../services/getMovies';
@@ -8,14 +8,16 @@ export function useMovie() {
 	const [sort, setSort] = useState(false);
 	const lastSearch = useRef('');
 
-	// ACA SE VUELVE A CREAR CADA VEZ QUE EL SORT CAMBIA SIN NINGUN TIPO DE SENTIDO YA QUE ESTA FUNCION NO DEPENDE DEL SORT
-	async function getMovies(search) {
-		if (search === lastSearch.current) return;
+	// Storage comsuption
+	const getMovies = useCallback(async (search) => {
+		if (search === lastSearch.current || search === '') return;
+		console.log('me volvi a llamar');
 		lastSearch.current = search;
-		const movies = await getMoviesService(search);
+		const movies = await getMoviesService(search.trim());
 		setMovies(movies);
-	}
+	}, []);
 
+	console.log('movies');
 	const sortedMovies = sort
 		? [...movies].sort((a, b) => a.title.localeCompare(b.title))
 		: movies;

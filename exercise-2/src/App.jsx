@@ -1,22 +1,15 @@
 import { useMovie } from './hooks/useMovies';
+import { useDebounce } from './hooks/useDebounce';
 import { MoviesList } from './components/movies';
-import { useRef } from 'react';
 import './App.css';
+import { useEffect } from 'react';
 
 function App() {
 	const { movies, getMovies, setSort } = useMovie();
-
-	const debounce = useRef(null);
-	// PUNTO EXTRA NUMERO TRES ES MUY INEFICIENTE HACE MUCHAS LLAMASDAS A LA API
-	// const handleChange = (e) => {
-	// 	getMovies(e.target.value);
-	// };
+	const [debounce, clearDebounce] = useDebounce();
 
 	const handleChange = (e) => {
-		// Debounce
-		clearTimeout(debounce.current);
-
-		debounce.current = setTimeout(() => {
+		debounce(() => {
 			getMovies(e.target.value);
 		}, 450);
 	};
@@ -27,10 +20,14 @@ function App() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		clearTimeout(debounce.current);
+		clearDebounce();
 		const { search } = Object.fromEntries(new FormData(e.target));
 		getMovies(search);
 	};
+
+	useEffect(() => {
+		console.log('eeeee');
+	}, [debounce, clearDebounce]);
 
 	return (
 		<div>

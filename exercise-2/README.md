@@ -27,14 +27,14 @@ Primera iteración:
 
     ✅ Evita que se haga la búsqueda continuamente al escribir (debounce)
 
-    <!-- esto puede ocacionar un raice condition una solicitud puede terminar antes que otra y ocasionar que se muestra la data incorrecta -->
+    <!-- esto puede ocacionar un race condition una solicitud puede terminar antes que otra y ocasionar que se muestra la data incorrecta -->
 
 Segunda iteracion:
 
-    Optimizar el codigo mediante useMemo y useCallback de ser posible
+    ✅ Optimizar el codigo mediante useMemo y useCallback de ser posible
+
+    ✅ Crear un useDebounce
 
     crear una vista adicional si se selecciona una pelicula donde se muestre toda la info
-
-    crear un useDebounce
 
     hacer testing de la app
