@@ -2,7 +2,6 @@ import { useMovie } from './hooks/useMovies';
 import { useDebounce } from './hooks/useDebounce';
 import { MoviesList } from './components/movies';
 import './App.css';
-import { useEffect } from 'react';
 
 function App() {
 	const { movies, getMovies, setSort } = useMovie();
@@ -25,15 +24,14 @@ function App() {
 		getMovies(search);
 	};
 
-	useEffect(() => {
-		console.log('eeeee');
-	}, [debounce, clearDebounce]);
-
 	return (
 		<div>
 			<header>
 				<h1>Buscador de películas</h1>
-				<form onSubmit={handleSubmit}>
+				<form
+					onSubmit={handleSubmit}
+					aria-label='search movie'
+				>
 					<label htmlFor='search'>
 						Película
 						<input
