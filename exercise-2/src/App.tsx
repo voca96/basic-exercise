@@ -7,7 +7,7 @@ function App() {
 	const { movies, getMovies, setSort } = useMovie();
 	const [debounce, clearDebounce] = useDebounce();
 
-	const handleChange = (e) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		debounce(() => {
 			getMovies(e.target.value);
 		}, 450);
@@ -17,11 +17,11 @@ function App() {
 		setSort((prev) => !prev);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		clearDebounce();
-		const { search } = Object.fromEntries(new FormData(e.target));
-		getMovies(search);
+		const { search } = Object.fromEntries(new FormData(e.currentTarget));
+		getMovies(search.toString());
 	};
 
 	return (

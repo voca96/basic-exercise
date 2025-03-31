@@ -1,7 +1,21 @@
 import { API_KEY } from '../config';
 
-function moviesFormat(moviesToFormats) {
-	return moviesToFormats?.map((movie) => ({
+type apiMovieType = {
+	imdbID: string;
+	Title: string;
+	Year: string;
+	Poster: string;
+};
+
+export type movieType = {
+	id: string;
+	title: string;
+	year: string;
+	poster: string;
+};
+
+function moviesFormat(moviesToFormats: apiMovieType[]): movieType[] {
+	return moviesToFormats?.map((movie: apiMovieType) => ({
 		id: movie.imdbID,
 		title: movie.Title,
 		year: movie.Year,
@@ -9,7 +23,7 @@ function moviesFormat(moviesToFormats) {
 	}));
 }
 
-export async function getMoviesService(search) {
+export async function getMoviesService(search: string) {
 	if (search === '') return;
 
 	try {

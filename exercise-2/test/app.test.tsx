@@ -53,7 +53,7 @@ describe('E2E test', () => {
 	test('get movies, sorted it, ', async () => {
 		const userAction = userEvent.setup({
 			// works even when I comment the following
-			advanceTimers: (ms) => vi.advanceTimersByTime(ms),
+			// advanceTimers: (ms) => vi.advanceTimersByTime(ms),
 		});
 
 		render(<App />);
@@ -72,8 +72,8 @@ describe('E2E test', () => {
 		const movieText = 'star';
 
 		await userAction.type(input, movieText);
-		// await act(() => vi.runAllTimers());
-		await userAction.click(button!);
+		await act(() => vi.runAllTimers());
+		// await userAction.click(button!);
 
 		const list = screen.getByRole('list');
 		expect(list).toBeDefined();
@@ -90,11 +90,15 @@ describe('E2E test', () => {
 		await userAction.click(check);
 		expect(list.childNodes.length).toBeGreaterThan(0);
 
+		Array.from(list.childNodes).forEach((node) => {
+			console.log(node.childNodes[0].textContent);
+		});
+
 		const listElementAfterSort = screen.getByText(
 			'Rogue One: A Star Wars Story'
 		);
 		expect(listElementAfterSort).toBeDefined();
-		screen.debug();
+		// screen.debug();
 		// await userAction.clear(input);
 		// await userAction.click(button!);
 	});

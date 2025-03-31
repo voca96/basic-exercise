@@ -1,4 +1,6 @@
-function MovieToShow({ movies }) {
+import { movieType } from '../services/getMovies';
+
+function MovieToShow({ movies }: { movies: movieType[] }) {
 	return (
 		<>
 			<h2>Lista de películas</h2>
@@ -24,7 +26,7 @@ function NoMoviesToShow() {
 	return <p>No se encontraron resultados para esta busqueda</p>;
 }
 
-export function MoviesList({ movies }) {
+export function MoviesList({ movies }: { movies: movieType[] }) {
 	return movies.length > 0 ? (
 		<MovieToShow movies={movies} />
 	) : (
