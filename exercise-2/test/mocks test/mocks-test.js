@@ -1,4 +1,4 @@
-export const movies = {
+export const moviesStar = {
 	Search: [
 		{
 			Title: 'Star Wars: Episode IV - A New Hope',
@@ -82,5 +82,92 @@ export const movies = {
 		},
 	],
 	totalResults: '4768',
+	Response: 'True',
+};
+
+export const moviesSam = {
+	Search: [
+		{
+			Title: 'I Am Sam',
+			Year: '2001',
+			imdbID: 'tt0277027',
+			Type: 'movie',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BZDBmMTY1YWEtMjc4Yy00YjhhLTliZjctMzBhN2U2NzRlNDQyXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Summer of Sam',
+			Year: '1999',
+			imdbID: 'tt0162677',
+			Type: 'movie',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BZmI0OTZiNWYtMzhkNS00ZmVhLWIyY2MtZmNkNGE0NjM2ZmYyXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Play It Again, Sam',
+			Year: '1972',
+			imdbID: 'tt0069097',
+			Type: 'movie',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BODQ1YWZiMjItYjU2OS00YTYzLWE1MWEtYmM4MzE2YTJiYzUxXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Sam Bahadur',
+			Year: '2023',
+			imdbID: 'tt10786774',
+			Type: 'movie',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BMDVkMjZlMGEtMjZlOS00MzQ3LThhOTUtYjY4YTE2OTZiMjBjXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Sam & Cat',
+			Year: '2013–2014',
+			imdbID: 'tt2487090',
+			Type: 'series',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BYTRiNTFmMWItOWI3Ni00YWYwLThhZjAtYWI3MTU5N2E3Y2EzXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'The Sons of Sam: A Descent into Darkness',
+			Year: '2021',
+			imdbID: 'tt13156316',
+			Type: 'series',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BYzViZGRmMjYtNDAwMC00MzgxLTliZmMtYmI3Y2Q1NTdjOTMyXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Burn Notice: The Fall of Sam Axe',
+			Year: '2011',
+			imdbID: 'tt1697851',
+			Type: 'movie',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BM2YzYjc1NjMtMTNmNy00MzA1LWFmOTYtZTNlMzFlY2QyNTIyXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Good Sam',
+			Year: '2019',
+			imdbID: 'tt9032888',
+			Type: 'movie',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BNzNlMDkxNzEtYzRiYS00ZTU1LWE2OGQtYjY5Y2I2MjNlYjk3XkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Good Neighbor Sam',
+			Year: '1964',
+			imdbID: 'tt0058153',
+			Type: 'movie',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BZmEwMWQ4ZDgtN2YxNy00MTQ5LWEyMmItZTdiMjY3YmJmZTM1XkEyXkFqcGc@._V1_SX300.jpg',
+		},
+		{
+			Title: 'Men in Kilts: A Roadtrip with Sam and Graham',
+			Year: '2021–',
+			imdbID: 'tt7554866',
+			Type: 'series',
+			Poster:
+				'https://m.media-amazon.com/images/M/MV5BOThiYWI0YzgtOTI3Yy00ZDc1LTg2OGYtY2YwZjRjNGYwMGEyXkEyXkFqcGc@._V1_SX300.jpg',
+		},
+	],
+	totalResults: '1035',
 	Response: 'True',
 };

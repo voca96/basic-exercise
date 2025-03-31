@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import {
 	describe,
 	test,
@@ -9,26 +9,10 @@ import {
 	beforeEach,
 	vi,
 } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { setupServer } from 'msw/node';
-import { http, HttpResponse } from 'msw';
-import { movies } from './mocks test/mocks-test';
+import { server } from './mocks test/mock-server';
 import App from '../src/App';
-
-export const restHandlers = [
-	http.get(`https://www.omdbapi.com/`, ({ request }) => {
-		const url = new URL(request.url);
-		// s = search
-		const s = url.searchParams.get('s');
-
-		if (s === 'star') {
-			return HttpResponse.json(movies);
-		}
-	}),
-];
-
-const server = setupServer(...restHandlers);
 
 // Start server before all tests
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
@@ -41,8 +25,6 @@ afterEach(() => server.resetHandlers());
 
 describe('E2E test', () => {
 	beforeEach(() => {
-		// This feels weird to do, given what it does:
-		// https://sinonjs.org/releases/latest/fake-timers/#:~:text=config.-,shouldAdvanceTime
 		vi.useFakeTimers({ shouldAdvanceTime: true });
 	});
 
@@ -50,11 +32,8 @@ describe('E2E test', () => {
 		vi.runOnlyPendingTimers();
 		vi.useRealTimers();
 	});
-	test('get movies, sorted it, ', async () => {
-		const userAction = userEvent.setup({
-			// works even when I comment the following
-			// advanceTimers: (ms) => vi.advanceTimersByTime(ms),
-		});
+	test('get movies, sorted it by button & debounce', async () => {
+		const userAction = userEvent.setup();
 
 		render(<App />);
 
@@ -72,8 +51,7 @@ describe('E2E test', () => {
 		const movieText = 'star';
 
 		await userAction.type(input, movieText);
-		await act(() => vi.runAllTimers());
-		// await userAction.click(button!);
+		await userAction.click(button!);
 
 		const list = screen.getByRole('list');
 		expect(list).toBeDefined();
@@ -90,16 +68,24 @@ describe('E2E test', () => {
 		await userAction.click(check);
 		expect(list.childNodes.length).toBeGreaterThan(0);
 
-		Array.from(list.childNodes).forEach((node) => {
-			console.log(node.childNodes[0].textContent);
-		});
+		// Array.from(list.childNodes).forEach((node) => {
+		// 	console.log(node.childNodes[0].textContent);
+		// });
 
 		const listElementAfterSort = screen.getByText(
 			'Rogue One: A Star Wars Story'
 		);
 		expect(listElementAfterSort).toBeDefined();
-		// screen.debug();
-		// await userAction.clear(input);
-		// await userAction.click(button!);
+
+		await userAction.clear(input);
+		expect(input.textContent).toBe('');
+
+		await userAction.type(input, 'sam');
+		await act(() => vi.runAllTimers());
+
+		expect(list.childNodes.length).toBeGreaterThan(0);
+		const samListElement = screen.getByText('I Am Sam');
+
+		expect(samListElement).toBeDefined();
 	});
 });

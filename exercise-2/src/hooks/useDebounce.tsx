@@ -13,7 +13,7 @@ export function useDebounce() {
 		clearDebounce();
 
 		debounceRef.current = setTimeout(() => {
-			console.log('no se limpio');
+			// console.log('no se limpio');
 			fn();
 		}, time);
 	};
@@ -21,7 +21,7 @@ export function useDebounce() {
 	const clearDebounce = () => {
 		if (debounceRef.current) {
 			clearTimeout(debounceRef.current);
-			console.log('se limpio');
+			// console.log('se limpio');
 		}
 	};
 
