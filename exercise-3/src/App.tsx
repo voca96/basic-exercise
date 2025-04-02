@@ -1,121 +1,40 @@
 import './style.css';
-import { useState } from 'react';
-import { DeleteIcon, DragIcon } from './Icons';
-import { mockList, type ToDoItems, type ItemId } from './mock/list';
-import React from 'react';
-
-const TODO_FILTERS = {
-	ALL: 'all',
-	COMPLETED: 'completed',
-	ACTIVE: 'active',
-} as const;
-
-const FILTERS_BUTTONS = {
-	[TODO_FILTERS.ALL]: {
-		text: 'todos',
-	},
-	[TODO_FILTERS.COMPLETED]: {
-		text: 'completados',
-	},
-	[TODO_FILTERS.ACTIVE]: {
-		text: 'activos',
-	},
-} as const;
-
-type FiltersValue = (typeof TODO_FILTERS)[keyof typeof TODO_FILTERS];
-
-function setLocalStorage(list: ToDoItems[]) {
-	window.localStorage.setItem('todoList', JSON.stringify(list));
-}
-
-function getLocalStorage(): ToDoItems[] {
-	return JSON.parse(window.localStorage.getItem('todoList')!) || mockList;
-}
+import { type ItemId } from './mock/list';
+import { ToDoList } from './components/todolist';
+import { Filters } from './components/filters';
+import { useFilters } from './hooks/useFilter';
+import { useTodoList } from './hooks/useTodoList';
 
 function App() {
-	const [todoList, setTodoList] = useState<ToDoItems[]>(getLocalStorage());
-	const [filter, setFilter] = useState<FiltersValue>(TODO_FILTERS.ALL);
-	const [dropAreaActive, setDropAreaActive] = useState<number | null>(null);
+	const {
+		todoList,
+		addTodo,
+		deleteTodo,
+		deleteCompletes,
+		finishTodo,
+		sortTodo,
+	} = useTodoList();
+	const [filteredTodos, handleFilter] = useFilters({ todoList });
 
+	// crear un elemento
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		const { todo } = Object.fromEntries(new FormData(e.currentTarget));
-		const newTodoList = [
-			...todoList,
-			{ id: crypto.randomUUID(), text: todo.toString(), finished: false },
-		];
-		setLocalStorage(newTodoList);
-		setTodoList(newTodoList);
+		addTodo(todo.toString());
 	}
 
+	// Eliminar un solo elemento
 	function handleClick(id: ItemId) {
-		return function () {
-			const newList = todoList.filter((item) => item.id !== id);
-			setLocalStorage(newList);
-			setTodoList(newList);
-		};
+		return () => deleteTodo(id);
 	}
 
+	//  marcar elemento como check
 	function handleCheck(id: ItemId) {
-		return function () {
-			const itemIndexById = todoList.findIndex((item) => item.id === id);
-
-			const newTodoList = [
-				...todoList.slice(0, itemIndexById),
-				{
-					...todoList[itemIndexById],
-					finished: !todoList[itemIndexById].finished,
-				},
-				...todoList.slice(itemIndexById + 1),
-			];
-			setLocalStorage(newTodoList);
-			setTodoList(newTodoList);
-		};
+		return () => finishTodo(id);
 	}
 
-	function handleFilter(filterToUse: FiltersValue) {
-		return function () {
-			setFilter(filterToUse);
-		};
-	}
-
-	function handleDeleteFinished() {
-		const newTodoList = todoList.filter((item) => !item.finished);
-		setLocalStorage(newTodoList);
-		setTodoList(newTodoList);
-	}
-
-	// DRAG AND DROP FUNCTIONS
-	function handleDragStart(e: React.DragEvent<HTMLLIElement>, item: ToDoItems) {
-		e.dataTransfer.clearData();
-		e.dataTransfer.setData('text/plain', JSON.stringify(item));
-	}
-
-	function handleDragEnd() {
-		setDropAreaActive(null);
-	}
-
-	function handleDrop(
-		e: React.DragEvent<HTMLDivElement>,
-		positionToInsert: number
-	) {
-		const todoItem = JSON.parse(e.dataTransfer.getData('text'));
-		const itemIndexById = todoList.findIndex((item) => item.id === todoItem.id);
-		if (
-			itemIndexById !== positionToInsert &&
-			itemIndexById + 1 !== positionToInsert
-		) {
-			const newTodoList = todoList.filter((item) => item.id !== todoItem.id);
-			newTodoList.splice(positionToInsert - 1, 0, todoItem);
-			setTodoList(newTodoList);
-		}
-	}
-
-	const filteredTodos = todoList.filter((todo) => {
-		if (filter === TODO_FILTERS.ACTIVE) return !todo.finished;
-		if (filter === TODO_FILTERS.COMPLETED) return todo.finished;
-		return todo;
-	});
+	// DeleteCompletes
+	const handleDeleteFinished = deleteCompletes;
 
 	return (
 		<main>
@@ -131,68 +50,17 @@ function App() {
 				</header>
 				{filteredTodos.length !== 0 ? (
 					<>
-						<ul className='todo-list'>
-							<div
-								className={dropAreaActive === 0 ? 'drop_area' : 'drop_hide'}
-								onDragEnter={() => setDropAreaActive(0)}
-								onDragLeave={() => setDropAreaActive(null)}
-								onDrop={(e) => handleDrop(e, 0)}
-								onDragOver={(e) => e.preventDefault()}
-							>
-								Drop here
-							</div>
-							{filteredTodos.map((item, index) => {
-								return (
-									<React.Fragment key={item.id}>
-										<li
-											className={item.finished ? 'finished' : ''}
-											draggable
-											onDragStart={(e) => handleDragStart(e, item)}
-											onDragEnd={handleDragEnd}
-										>
-											<span>
-												<DragIcon />
-											</span>
-											<input
-												type='checkbox'
-												checked={item.finished}
-												onChange={handleCheck(item.id)}
-											/>
-											{item.text}
-											<span onClick={handleClick(item.id)}>
-												<DeleteIcon />
-											</span>
-										</li>
-										<div
-											className={
-												dropAreaActive === index + 1 ? 'drop_area' : 'drop_hide'
-											}
-											onDragEnter={() => setDropAreaActive(index + 1)}
-											onDragLeave={() => setDropAreaActive(null)}
-											onDrop={(e) => handleDrop(e, index + 1)}
-											onDragOver={(e) => e.preventDefault()}
-										>
-											Drop here
-										</div>
-									</React.Fragment>
-								);
-							})}
-						</ul>
+						<ToDoList
+							filteredTodos={filteredTodos} // todos list
+							handleCheck={handleCheck} // finish
+							handleClick={handleClick} // delete
+							sortTodo={sortTodo}
+						/>
 						<footer>
-							<ul>
-								{Object.entries(FILTERS_BUTTONS).map(([key, { text }]) => {
-									return (
-										<li key={key}>
-											<span onClick={handleFilter(key as FiltersValue)}>
-												{text}
-											</span>
-										</li>
-									);
-								})}
-								<li>
-									<span onClick={handleDeleteFinished}>borrar terminados</span>
-								</li>
-							</ul>
+							<Filters
+								handleFilter={handleFilter}
+								handleDeleteFinished={handleDeleteFinished}
+							/>
 						</footer>
 					</>
 				) : (
@@ -201,7 +69,7 @@ function App() {
 					</div>
 				)}
 			</section>
-			<section className='a'></section>
+			<section className='img'></section>
 		</main>
 	);
 }

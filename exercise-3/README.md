@@ -28,7 +28,7 @@ Iteracion 3
 
 - Editar un todo pendiente con doble click
 
-- CSS e iconos
+✅ CSS e iconos
 
 - useReducer
 
