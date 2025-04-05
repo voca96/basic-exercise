@@ -30,6 +30,6 @@ Iteracion 3
 
 ✅ CSS e iconos
 
-- useReducer
+✅ useReducer
 
 - test end-to-end

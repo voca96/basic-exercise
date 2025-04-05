@@ -1,67 +1,52 @@
-import { useState } from 'react';
-import { ItemId, mockList, ToDoItems } from '../mock/list';
+import { useReducer } from 'react';
+import { ItemId, ToDoItems } from '../mock/list';
 
-export function setLocalStorage(list: ToDoItems[]) {
-	window.localStorage.setItem('todoList', JSON.stringify(list));
-}
-
-export function getLocalStorage(): ToDoItems[] {
-	return JSON.parse(window.localStorage.getItem('todoList')!) || mockList;
-}
+import {
+	InitialState,
+	TODO_LIST_ACTION,
+	todoReducer,
+} from '../reducers/todoListReducer';
 
 export function useTodoList() {
-	const [todoList, setTodoList] = useState<ToDoItems[]>(getLocalStorage());
+	const [state, dispatch] = useReducer(todoReducer, InitialState);
 
 	function addTodo(todo: string) {
-		const newTodoList = [
-			...todoList,
-			{ id: crypto.randomUUID(), text: todo, finished: false },
-		];
-		setLocalStorage(newTodoList);
-		setTodoList(newTodoList);
+		dispatch({
+			type: TODO_LIST_ACTION.ADD,
+			payload: { text: todo },
+		});
 	}
 
 	function deleteTodo(id: ItemId) {
-		const newList = todoList.filter((item) => item.id !== id);
-		setLocalStorage(newList);
-		setTodoList(newList);
+		dispatch({
+			type: TODO_LIST_ACTION.DELETE,
+			payload: { id },
+		});
 	}
 
 	function deleteCompletes() {
-		const newTodoList = todoList.filter((item) => !item.finished);
-		setLocalStorage(newTodoList);
-		setTodoList(newTodoList);
+		dispatch({
+			type: TODO_LIST_ACTION.DELETE_ALL_COMPLETE,
+			// payload: {}, // podria ser una solucion ...
+		});
 	}
 
 	function finishTodo(id: ItemId) {
-		const itemIndexById = todoList.findIndex((item) => item.id === id);
-
-		const newTodoList = [
-			...todoList.slice(0, itemIndexById),
-			{
-				...todoList[itemIndexById],
-				finished: !todoList[itemIndexById].finished,
-			},
-			...todoList.slice(itemIndexById + 1),
-		];
-		setLocalStorage(newTodoList);
-		setTodoList(newTodoList);
+		dispatch({
+			type: TODO_LIST_ACTION.FINISH,
+			payload: { id },
+		});
 	}
 
 	function sortTodo(todoItem: ToDoItems, positionToInsert: number) {
-		const itemIndexById = todoList.findIndex((item) => item.id === todoItem.id);
-		if (
-			itemIndexById !== positionToInsert &&
-			itemIndexById + 1 !== positionToInsert
-		) {
-			const newTodoList = todoList.filter((item) => item.id !== todoItem.id);
-			newTodoList.splice(positionToInsert - 1, 0, todoItem);
-			setTodoList(newTodoList);
-		}
+		dispatch({
+			type: TODO_LIST_ACTION.SORT,
+			payload: { item: todoItem, postion: positionToInsert },
+		});
 	}
 
 	return {
-		todoList,
+		todoList: state,
 		addTodo,
 		deleteTodo,
 		deleteCompletes,

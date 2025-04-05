@@ -4,7 +4,7 @@ export const INITIALS_ITEMS: Item[] = [
 	{
 		id: crypto.randomUUID(),
 		timestamp: Date.now(),
-		text: 'ideojuegos',
+		text: 'videojuegos',
 	},
 	{
 		id: crypto.randomUUID(),
@@ -14,7 +14,7 @@ export const INITIALS_ITEMS: Item[] = [
 	{
 		id: crypto.randomUUID(),
 		timestamp: Date.now(),
-		text: 'peliculas',
+		text: 'películas',
 	},
 	{
 		id: crypto.randomUUID(),
