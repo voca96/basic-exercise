@@ -70,6 +70,7 @@ ul li {
 	min-height: 30px;
 	border-bottom: 1px solid #eee;
 	transition: all 0.2s ease-in;
+	position: relative;
 }
 
 .todo-list li span:last-child {
@@ -77,6 +78,23 @@ ul li {
 	margin-left: auto;
 	cursor: pointer;
 	display: none;
+}
+
+.todo-list li p {
+	display: inline;
+	margin: 0;
+	width: 100%;
+}
+
+.todo-list li .update-input {
+	position: absolute;
+	left: 0;
+	width: calc(100% - 12px - 2px);
+	padding: 0;
+	padding-left: 0px;
+	padding-left: 12px;
+	height: 2.4em;
+	margin-bottom: 0;
 }
 
 .todo-list li span {
@@ -107,6 +125,7 @@ footer ul {
 footer ul li {
 	padding: 0;
 	border: none;
+	cursor: pointer;
 }
 
 footer ul li:last-child {

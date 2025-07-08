@@ -6,6 +6,7 @@ export const TODO_LIST_ACTION = {
 	DELETE_ALL_COMPLETE: 'DELETE_COMPLETES',
 	FINISH: 'FINISH_TODO',
 	SORT: 'SORT_TODO',
+	UPDATE: 'UPDATE_TODO',
 } as const;
 
 // type Actions = (typeof TODO_LIST_ACTION)[keyof typeof TODO_LIST_ACTION];
@@ -46,7 +47,18 @@ type SortTodo = {
 	payload: { item: ToDoItems; postion: number };
 };
 
-type Action = AllTodo | DelTodo | DelCompleteTodo | FinishTodo | SortTodo;
+type UpdateTodo = {
+	type: typeof TODO_LIST_ACTION.UPDATE;
+	payload: { id: ItemId; text: string };
+};
+
+type Action =
+	| AllTodo
+	| DelTodo
+	| DelCompleteTodo
+	| FinishTodo
+	| SortTodo
+	| UpdateTodo;
 
 function setLocalStorage(list: ToDoItems[]) {
 	window.localStorage.setItem('todoList', JSON.stringify(list));
@@ -107,15 +119,33 @@ export const todoReducer = (state: ToDoItems[], action: Action) => {
 		case TODO_LIST_ACTION.SORT: {
 			const { item: todoItem, postion: positionToInsert } = action.payload;
 			const itemIndexById = state.findIndex((item) => item.id === todoItem.id);
+
 			if (
 				itemIndexById !== positionToInsert &&
 				itemIndexById + 1 !== positionToInsert
 			) {
 				const newTodoList = state.filter((item) => item.id !== todoItem.id);
-				newTodoList.splice(positionToInsert - 1, 0, todoItem!);
+				console.log(newTodoList);
+				newTodoList.splice(positionToInsert, 0, todoItem!);
 				return newTodoList;
 			}
 			return state;
+		}
+
+		case TODO_LIST_ACTION.UPDATE: {
+			const { id, text } = action.payload;
+			const itemIndexById = state.findIndex((item) => item.id === id);
+
+			const newTodoList = [
+				...state.slice(0, itemIndexById),
+				{
+					...state[itemIndexById],
+					text,
+				},
+				...state.slice(itemIndexById + 1),
+			];
+			setLocalStorage(newTodoList);
+			return newTodoList;
 		}
 
 		default: {

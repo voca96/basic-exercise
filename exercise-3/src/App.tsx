@@ -13,6 +13,7 @@ function App() {
 		deleteCompletes,
 		finishTodo,
 		sortTodo,
+		updateTodo,
 	} = useTodoList();
 	const [filteredTodos, handleFilter] = useFilters({ todoList });
 
@@ -55,6 +56,7 @@ function App() {
 							handleCheck={handleCheck} // finish
 							handleClick={handleClick} // delete
 							sortTodo={sortTodo}
+							updateTodo={updateTodo}
 						/>
 						<footer>
 							<Filters

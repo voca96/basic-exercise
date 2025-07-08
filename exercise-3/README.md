@@ -26,7 +26,7 @@ Iteracion 3
 
 - mostrar numero de Todo pendientes
 
-- Editar un todo pendiente con doble click
+✅ Editar un todo pendiente con doble click
 
 ✅ CSS e iconos
 

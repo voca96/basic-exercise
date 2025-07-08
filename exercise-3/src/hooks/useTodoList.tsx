@@ -45,6 +45,13 @@ export function useTodoList() {
 		});
 	}
 
+	function updateTodo(id: ItemId, text: string) {
+		dispatch({
+			type: TODO_LIST_ACTION.UPDATE,
+			payload: { id, text },
+		});
+	}
+
 	return {
 		todoList: state,
 		addTodo,
@@ -52,5 +59,6 @@ export function useTodoList() {
 		deleteCompletes,
 		finishTodo,
 		sortTodo,
+		updateTodo,
 	};
 }
